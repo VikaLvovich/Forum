@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/menuLayout">
+<head>
+    <meta charset="UTF-8">
+    <title>Topic</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="container">
+        <div class="col-sm-12 col-md-10">
+            <p class="font-weight-bold">Тема: </p>
+            <p class="font-weight-normal" th:text="${topic.getTitle()}"></p>
+        </div>
+        <div class="col-sm-12 col-md-10">
+            <p class="font-weight-bold">Текст: </p>
+            <p class="font-weight-normal" th:text="${topic.getInfo()}"></p>
+        </div>
+        <div class="col-sm-12 col-md-10">
+            <p class="font-weight-bold">Добавить новый комментарий: </p>
+        </div>
+        <div class="col-sm-12 col-md-10">
+            <form th:action="@{/topic}" method="post">
+                <div class="row">
+                    <div class="col s12">
+                        <span>Текст комментария:</span>
+                    </div>
+                </div>
+                <div class="form-group input-group">
+                            <textarea class="form-control" name="info" minlength="5" maxlength="1024"
+                                      data-length="1024" required="required"></textarea>
+                </div>
+                <div class="form-group">
+                    <div class="col s12 center">
+                        <button class="btn btn-success" type="submit" name="comment">Добавить</button>
+                    </div>
+                </div>
+                <input type="hidden" name="id_topic" th:value="${topic.getId()}"/>
+                <input type="hidden" name="id_user" th:value="${user_id}"/>
+            </form>
+        </div>
+        <div class="col-sm-12 col-md-10">
+            <div th:each="comment : ${comments}" style="margin: 3% 0 3%; padding: 2%; border-top-right-radius: 10px;
+                        border-bottom-right-radius: 10px; background: linear-gradient(to right, #e7e4e4, #f3f2f2);
+                        background: -webkit-linear-gradient(left, #e7e4e4, #f3f2f2);
+                        background: -o-linear-gradient(right, #e7e4e4, #f3f2f2);
+                        background: -moz-linear-gradient(right, #e7e4e4, #f3f2f2);">
+                <p>Автор: <span th:text="${topic.getUser().getUsername()}"></span></p>
+                <p>Дата: <span th:text="${comment.displayParsedCreatedDate()}"></span></p>
+                <p>Комментарий: <span th:text="${comment.getInfo()}"></span></p>
+                <span th:if="${comment.getUser().getId() == user_id}">
+                        <form th:action="@{/topic/{topic.getId()}}" method="post">
+                            <input type="hidden" name="id_comment" th:value="${comment.getId()}"/>
+                            <input type="hidden" name="action" th:value="delete"/>
+                            <input type="hidden" name="id_topic" th:value="${topic.getId()}"/>
+                            <button class="btn btn-secondary">Удалить</button>
+                        </form>
+                </span>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

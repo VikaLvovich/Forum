@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/menuLayout">
+<head>
+    <meta charset="UTF-8">
+    <title>Comments</title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div class="container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Тема</th>
+                <th>Комментарий</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="comment : ${comments}">
+                <tr>
+                    <td>
+                        <a th:href="@{'/topic/' + ${comment.getTopic().getId()}}">
+                            <span class="badge">
+                                <span th:text="${comment.getTopic().getTitle()}"></span>
+                            </span>
+                        </a>
+                    </td>
+                    <td th:text="${comment.displayBeginning()}">Topic's title</td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

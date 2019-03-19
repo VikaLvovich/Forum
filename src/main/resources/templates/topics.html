@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/menuLayout">
+<head>
+    <meta charset="UTF-8">
+    <title>Topics</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Тема</th>
+                <th>Автор</th>
+                <th>Дата создания</th>
+                <th>Информация</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="topic : ${topics}">
+                <tr>
+                    <td th:text="${topic.getTitle()}"></td>
+                    <td th:text="${topic.getUser().getUsername()}"></td>
+                    <td th:text="${topic.displayParsedCreatedDate()}">Topic's created date</td>
+                    <td>
+                        <a th:href="@{'/topic/' + ${topic.getId()}}">
+                            <span class="badge">
+                                Число комментариев:
+                                <span th:text="${commentRepository.countCommentsByTopic_Id(topic.getId())}"></span>
+                            </span>
+                        </a>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>
