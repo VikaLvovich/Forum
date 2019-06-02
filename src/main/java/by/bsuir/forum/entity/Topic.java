@@ -2,16 +2,7 @@ package by.bsuir.forum.entity;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -34,14 +25,22 @@ public class Topic {
     @Column(length = 32)
     private String category;
 
+    @Column(name = "created_date")
     private LocalDateTime createdDate;
 
     @ManyToOne
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "topic")
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "topic")
+    private List<TopicMark> topicMarks;
+
+    @ManyToOne
+    @JoinColumn(name = "section_id")
+    private Section section;
 
     public Long getId() {
         return id;
@@ -99,9 +98,41 @@ public class Topic {
         this.comments = comments;
     }
 
+    public Section getSection() {
+        return section;
+    }
+
+    public void setSection(Section section) {
+        this.section = section;
+    }
+
+    public List<TopicMark> getTopicMarks() {
+        return topicMarks;
+    }
+
+    public void setTopicMarks(List<TopicMark> topicMarks) {
+        this.topicMarks = topicMarks;
+    }
+
     public String displayParsedCreatedDate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm - dd.MM.yyyy");
         return this.createdDate.format(formatter);
     }
 
+    public Integer getMarkByUserId(Long userId) {
+        for (TopicMark topicMark : topicMarks) {
+            if (topicMark.getUser().getId() == userId) {
+                return topicMark.getMark();
+            }
+        }
+        return 0;
+    }
+
+    public Integer getResultMark() {
+        Integer resultMark = 0;
+        for (TopicMark topicMark : topicMarks) {
+            resultMark += topicMark.getMark();
+        }
+        return resultMark;
+    }
 }

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -18,15 +19,19 @@ public class Comment {
     @Column(nullable = false, length = 1024)
     private String info;
 
+    @Column(name = "created_date")
     private LocalDateTime createdDate;
 
     @ManyToOne
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "id_topic")
+    @JoinColumn(name = "topic_id")
     private Topic topic;
+
+    @OneToMany(mappedBy = "comment")
+    private List<CommentMark> commentMarks;
 
     public Long getId() {
         return id;
@@ -68,6 +73,14 @@ public class Comment {
         this.topic = topic;
     }
 
+    public List<CommentMark> getCommentMarks() {
+        return commentMarks;
+    }
+
+    public void setCommentMarks(List<CommentMark> commentMarks) {
+        this.commentMarks = commentMarks;
+    }
+
     public String displayParsedCreatedDate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm - dd.MM.yyyy");
         return this.createdDate.format(formatter);
@@ -76,4 +89,22 @@ public class Comment {
     public String displayBeginning() {
         return (this.info.length() < 32) ? this.info.concat("...") : this.info.substring(0, 30).concat("...");
     }
+
+    public Integer getMarkByUserId(Long userId) {
+        for (CommentMark commentMark : commentMarks) {
+            if (commentMark.getUser().getId() == userId) {
+                return commentMark.getMark();
+            }
+        }
+        return 0;
+    }
+
+    public Integer getResultMark() {
+        Integer resultMark = 0;
+        for (CommentMark commentMark : commentMarks) {
+            resultMark += commentMark.getMark();
+        }
+        return resultMark;
+    }
+
 }

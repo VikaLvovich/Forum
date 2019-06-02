@@ -11,6 +11,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Transactional
     void deleteCommentById(Long id);
 
+    Comment findCommentById(Long Id);
+
     Long countCommentsByUser_Id(Long id);
 
     Long countCommentsByTopic_Id(Long topic_id);
@@ -18,4 +20,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findCommentByUser_IdOrderByCreatedDateDesc(Long id);
 
     List<Comment> findCommentByTopic_Id(Long topic_id);
+
+
 }

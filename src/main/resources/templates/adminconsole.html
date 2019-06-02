@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/menuLayout">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin console</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="container">
+        <div class="col-sm-12 col-md-10">
+            <ul>
+                <li>
+                    <a th:href="@{'/topics/user/' + ${user.getId()}}">
+                                <span class="badge">
+                                    Мои записи:
+                                    <span th:text="${numberOfTopics}"></span>
+                                </span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{'/comments/' + ${user.getId()}}">
+                                <span class="badge">
+                                    Мои комментарии:
+                                    <span th:text="${numberOfComments}"></span>
+                                </span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{'/comments/' + ${user.getId()}}">
+                                <span class="badge">
+                                    Мои отметки:
+                                    <span th:text="${numberOfCommentMarks}"></span>
+                                </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+</body>
+</html>

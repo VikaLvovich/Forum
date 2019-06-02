@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/menuLayout">
+<head>
+    <meta charset="UTF-8">
+    <title>Sections</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <form th:action="@{/sections}" method="post">
+        <div class="container">
+        <div class="row">
+            <div class="col s12">
+                                <span>Наименование нового раздела:
+                                </span>
+            </div>
+        </div>
+        <div class="form-group input-group">
+            <input type="text" name="name" class="with-gap" id="name" required="required"
+                   minlength="2" maxlength="32" data-length="32"/>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                                <span>Описание нового раздела:
+                                </span>
+            </div>
+        </div>
+        <div class="form-group input-group">
+            <input type="text" name="description" class="with-gap" id="description" required="required"
+                   minlength="2" maxlength="60" data-length="60"/>
+        </div>
+        <div class="form-group">
+            <div class="col s12 center">
+                <button class="btn btn-success" type="submit" name="add">Добавить</button>
+            </div>
+        </div>
+        </div>
+    </form>
+    <div class="container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Дата создания</th>
+                <th>Описание</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="section : ${sections}">
+                <tr>
+                    <td th:text="${section.getName()}"></td>
+                    <td th:text="${section.displayParsedCreatedDate()}"></td>
+                    <td th:text="${section.getDescription()}">Topic's created date</td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

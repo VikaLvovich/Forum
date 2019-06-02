@@ -1,9 +1,8 @@
 package by.bsuir.forum.controller;
 
+import by.bsuir.forum.entity.Topic;
 import by.bsuir.forum.repository.CommentRepository;
 import by.bsuir.forum.repository.TopicRepository;
-import by.bsuir.forum.entity.Topic;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;

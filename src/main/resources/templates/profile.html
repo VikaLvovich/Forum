@@ -3,12 +3,14 @@
       layout:decorator="layout/menuLayout">
 <head>
     <meta charset="UTF-8">
+    <script th:src="@{/ckeditor/ckeditor.js}"></script>
     <title>Profile</title>
 </head>
 <body>
 <main layout:fragment="content">
     <div class="container">
         <div class="col-sm-12 col-md-10">
+
             <ul>
                 <li>
                     <a th:href="@{'/topics/user/' + ${user.getId()}}">
@@ -26,7 +28,43 @@
                                 </span>
                     </a>
                 </li>
+                <li>
+                    <a th:href="@{'/comments/' + ${user.getId()}}">
+                                <span class="badge">
+                                    Мои отметки:
+                                    <span th:text="${numberOfCommentMarks}"></span>
+                                </span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{'/sections/'}">
+                                <span class="badge">
+                                    <b>
+                                        Настройка разделов
+                                    </b>
+                                </span>
+                    </a>
+                </li>
             </ul>
+        </div>
+        <div class="col-sm-12 col-md-10">
+            <p class="font-weight-bold">База знаний: </p>
+        </div>
+        <div class="container">
+            <div class="container-fluid">
+                <form th:action="@{/profile}" method="post">
+                    <div class="form-group input-group">
+                            <textarea class="ckeditor" name="info" minlength="5" maxlength="1024"
+                                      data-length="1024" required="required" th:text="${user.getInfo()}"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <div class="col s12 center">
+                            <button class="btn btn-success" type="submit" name="add">Сохранить</button>
+                        </div>
+                    </div>
+                    <input type="hidden" name="user_id" th:value="${user.getId()}"/>
+                </form>
+            </div>
         </div>
     </div>
 </main>

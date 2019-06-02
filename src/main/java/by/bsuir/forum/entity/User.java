@@ -27,13 +27,38 @@ public class User implements UserDetails {
     @Column(nullable = false, length = 60)
     private String password;
 
+    @Column(name = "created_date")
     private LocalDateTime createdDate;
+
+    @Column(name = "info")
+    private String info;
 
     @OneToMany(mappedBy = "user")
     private List<Topic> topics;
 
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "user")
+    private List<CommentMark> commentMarks;
+
+    @ManyToMany(mappedBy = "users")
+    private List<UserGroup> userGroups;
+
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private UserStatus status;
+
+
+    @ManyToMany(mappedBy = "interestingUsers")
+    private List<User> subscriber;
+
+    @ManyToMany
+    @JoinTable(
+            name = "l_subscription",
+            joinColumns = @JoinColumn(name = "subscriber_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> interestingUsers;
 
     public Long getId() {
         return id;
@@ -109,8 +134,68 @@ public class User implements UserDetails {
         this.comments = comments;
     }
 
+    public List<CommentMark> getCommentMarks() {
+        return commentMarks;
+    }
+
+    public void setCommentMarks(List<CommentMark> commentMarks) {
+        this.commentMarks = commentMarks;
+    }
+
+    public List<UserGroup> getUserGroups() {
+        return userGroups;
+    }
+
+    public void setUserGroups(List<UserGroup> userGroups) {
+        this.userGroups = userGroups;
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
+    }
+
+    public List<User> getSubscriber() {
+        return subscriber;
+    }
+
+    public void setSubscriber(List<User> subscriber) {
+        this.subscriber = subscriber;
+    }
+
+    public List<User> getInterestingUsers() {
+        return interestingUsers;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public void setInterestingUsers(List<User> interestingUsers) {
+        this.interestingUsers = interestingUsers;
+    }
+
     public String displayParsedDate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         return this.createdDate.format(formatter);
+    }
+
+    public boolean hasRight(String code) {
+        for(UserGroup ug: userGroups) {
+            for(GroupRight gr : ug.getGroupRights()) {
+                Right right = gr.getRight();
+                if (right.getCode().equals(code) && gr.isRight()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
